@@ -1,0 +1,23 @@
+#! /bin/bash
+  
+# this function prints a (basic) git branch status  
+function __git_branch_ps(){
+     local git_status="`git status 2>&1`"
+     local br=( `echo "$git_status" |grep branch` )
+     # new(?) version output
+     if [ "${br[1]}" == "branch" ]; then
+         local branch="${br[2]}"
+     fi
+     # old version output
+      if [ "${br[2]}" == "branch" ]; then
+          local branch="${br[3]}"
+      fi
+          if [ -n "$branch" ]; then
+          local clean="`echo "$git_status" |grep "working directory clean"`"
+          if [ -n "$clean" ]; then
+              echo -e "$txtgrn($branch)$txtrst"
+          else
+              echo -e "$txtred($branch)$txtrst"
+          fi
+  fi
+}
